@@ -1,0 +1,11 @@
+% Example matrix A from slides GPUComputing25-Lab4-SequentialSpMV.pdf
+% (https://didatticaonline.unitn.it/dol/pluginfile.php/1924269/mod_resource/content/3/GPUComputing25-Lab4-SequentialSpMV.pdf)
+6 6 8
+1 2 0.5
+1 5 1.2
+2 3 -1.0
+3 1 2.3
+3 6 0.2
+5 4 4.5
+6 2 -3.0
+6 5 6.1

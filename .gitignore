@@ -1,0 +1,8 @@
+# Folders
+.idea
+
+# Files
+*.o
+*.d
+*.tar.gz
+spmv

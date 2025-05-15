@@ -1,14 +1,23 @@
-CC := gcc 
-CFLAGS := -g
-LDFLAGS :=
-LOADLIBES :=
-LDLIBS :=
+CC        := gcc
+CFLAGS    := -std=c17 -Wall -Wextra
+CPPFLAGS  := -I./include/
+LDFLAGS   :=
+LDLIBS    :=
 
-CS := $(wildcard *.c)
-OBJS := $(CS:.c=.o)
-TARGET := spmv
+PROG := spmv
+SRCS := $(wildcard src/*.c)
+OBJS := $(patsubst %.c,%.o,$(SRCS))
+DEPS := $(OBJS:.o=.d)
 
-$(TARGET): $(OBJS)
+-include $(DEPS)
+
+
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 clean:
-	$(RM) $(OBJS) $(TARGET)
+	$(RM) $(OBJS) $(PROG) $(DEPS)
+
+.PHONY: all clean
