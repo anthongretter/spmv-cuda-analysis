@@ -14,10 +14,4 @@
 #include "cpu.h"
 #endif
 
-//#define ROUTINE(csr_row, csr_col, csr_val, m, n, vec, result, timer) \
-//    do {                                                      \
-//        SETUP();                                              \
-//        int \
-//    } while(0)
-
 #endif /* SPMV_CONFIG_H */

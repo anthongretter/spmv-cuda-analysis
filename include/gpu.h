@@ -12,11 +12,7 @@
 
 #define ALLOC(ptr, size)                cudaMalloc(ptr, size)
 #define FREE(ptr)                       cudaFree(ptr)
-#define ROUTINE(csr, vec, result, ops)  cuda_wrapper(csr, vec, result, ops)
-
-static void cuda_wrapper(struct CSR *m_csr, const VEC_T vec, VEC_T result, long *ops) {
-    cudaMemcpy()
-}
+#define ROUTINE(csr, vec, result, ops)
 
 /**
  * Performs sparse matrix-vector multiplication using CSR format
