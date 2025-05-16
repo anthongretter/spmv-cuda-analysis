@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "config.h"
-#include "commons.h"
+#include "config.cuh"
+#include "commons.cuh"
 
 /**
  * Opens a Matrix Market file specified via command line arguments

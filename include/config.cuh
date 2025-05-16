@@ -5,13 +5,13 @@
  * Configuration header for SPMV program
  * 
  * Includes the appropriate implementation header (GPU or CPU)
- * based on compilation flag GPU_IMP
+ * based on compilation flag (-DGPU)
  */
 
-#ifdef GPU_IMP
-#include "gpu.h"
+#if defined GPU
+#include "gpu.cuh"
 #else
-#include "cpu.h"
+#include "cpu.cuh"
 #endif
 
 #endif /* SPMV_CONFIG_H */

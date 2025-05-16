@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "mtx.h"
-#include "config.h"
-#include "matrix.h"
-#include "commons.h"
+#include "mtx.cuh"
+#include "config.cuh"
+#include "matrix.cuh"
+#include "commons.cuh"
 
 FILE* mtx_fopen_from_cli(int argc, const char *argv[]) {
     if (argc != 2) {

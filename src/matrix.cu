@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
-#include "matrix.h"
-#include "commons.h"
+#include "config.cuh"
+#include "matrix.cuh"
+#include "commons.cuh"
 
 
 MATRIX_T matrix_alloc(int row, int col) {
@@ -61,38 +61,43 @@ void matrix_print_csr(int row, int col, int n, struct CSR csr) {
     printf("\n");
 }
 
-VEC_T vec_ones(int length) {
-    VEC_T vec;
-    ALLOC(vec, length * sizeof(PRIM_T));
+struct CSR* matrix_csr_format(int row, int col, int n, MATRIX_T matrix) {
+    struct CSR* csr;
+    ALLOC(csr, sizeof(struct CSR));
+    ALLOC(csr->row, (row + 1) * sizeof(int));
+    ALLOC(csr->col, n * sizeof(int));
+    ALLOC(csr->val, n * sizeof(PRIM_T));
 
-    for (int i = 0; i < length; i++) {
-        vec[i] = 1;
-    }
-
-    return vec;
-}
-
-struct CSR matrix_csr_format(int row, int col, int n, MATRIX_T matrix) {
-    int *csr_row, *csr_col;
-    VEC_T csr_val;
-
-    ALLOC(csr_row, (row + 1) * sizeof(int));
-    ALLOC(csr_col, n * sizeof(int));
-    ALLOC(csr_val, n * sizeof(PRIM_T));
-
-    csr_row[0] = 0;
+    csr->row[0] = 0;
     int non_zero_row = 0;
 
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
             if (matrix[i][j]) {
-                csr_val[non_zero_row] = matrix[i][j];
-                csr_col[non_zero_row] = j;
+                csr->val[non_zero_row] = matrix[i][j];
+                csr->col[non_zero_row] = j;
                 non_zero_row++;
             }
         }
-        csr_row[i + 1] = non_zero_row;
+        csr->row[i + 1] = non_zero_row;
     }
-    csr_row[row] = n;
-    return (struct CSR) {row, csr_row, csr_col, csr_val };
+    csr->row[row] = n;
+    return csr;
+}
+
+VEC_T vec_rand(int length) {
+    VEC_T vec;
+    ALLOC(vec, length * sizeof(PRIM_T));
+    srand(time(0));
+
+    for (int i = 0; i < length; i++) {
+        vec[i] = rand();
+    }
+    return vec;
+}
+
+void vec_print(VEC_T vec, int length) {
+    for (int i = 0; i < length; i++) {
+        printf("%.2f ", vec[i]);
+    }
 }

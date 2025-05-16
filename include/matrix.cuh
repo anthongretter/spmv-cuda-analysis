@@ -4,14 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "config.h"
-#include "commons.h"
+#include "config.cuh"
+#include "commons.cuh"
 
 /**
  * Structure representing a compressed sparse row matrix
  */
 struct CSR {
-    int row_length;
     int* row;
     int* col;
     VEC_T val;
@@ -51,7 +50,7 @@ void matrix_print(int row, int col, MATRIX_T matrix);
  * @param matrix Pointer to the matrix to be converted
  * @return CSR matrix structure
  */
-struct CSR matrix_csr_format(int row, int col, int n, MATRIX_T matrix);
+struct CSR* matrix_csr_format(int row, int col, int n, MATRIX_T matrix);
 
 /**
  * Prints the CSR representation of a matrix to stdout
@@ -64,11 +63,16 @@ struct CSR matrix_csr_format(int row, int col, int n, MATRIX_T matrix);
 void matrix_print_csr(int row, int col, int n, struct CSR csr);
 
 /**
- * Creates and initializes a vector with all elements set to 1
+ * Creates and initializes a random vector
  *
  * @param length Length of the vector
- * @return A newly allocated vector with all elements set to 1
+ * @return A newly allocated vector
  */
-VEC_T vec_ones(int length);
+VEC_T vec_rand(int length);
+
+/**
+ * Prints a vector
+ */
+void vec_print(VEC_T vec, int length);
 
 #endif /* SPMV_MATRIX_H */
