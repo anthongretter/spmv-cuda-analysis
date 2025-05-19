@@ -37,14 +37,12 @@ MATRIX_T mtx_parse(FILE* file, int* row, int* col, int* n) {
     sscanf(line, "%d %d %d", row, col, n);
 
     MATRIX_T matrix = matrix_alloc(*row, *col);
-
     int r, c;
     PRIM_T value;
-
+	
     for (int i = 0; i < *n; i++) {
         fscanf(file, "%d %d %f", &r, &c, &value);
         matrix[r - 1][c - 1] = value;
-//        printf("%d %d %f\n", r, c, value);
     }
 
     printf("Loaded matrix (%dx%d) of %d non-zero elements\n", *row, *col, *n);

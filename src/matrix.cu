@@ -8,26 +8,26 @@
 
 
 MATRIX_T matrix_alloc(int row, int col) {
-    // Allocate memory for row pointers
     MATRIX_T matrix;
     ALLOC(matrix, row * sizeof(VEC_T));
     if (!matrix) {
-        FREE(matrix);
+        printf("Failed to allocate memory for row pointers\n");
         return NULL;
     }
 
-    // Allocate memory for the entire matrix data in one contiguous block
     VEC_T data;
     ALLOC(data, row * col * sizeof(PRIM_T));
     if (!data) {
         FREE(matrix);
-        FREE(data);
+        printf("Failed to allocate memory for data\n");
         return NULL;
     }
 
-    // Set up row pointers to point to appropriate positions in the data block
     for (int i = 0; i < row; i++) {
         matrix[i] = &data[i * col];
+        for (int j = 0; j < col; j++) {
+            matrix[i][j] = 0;
+        }
     }
 
     return matrix;
