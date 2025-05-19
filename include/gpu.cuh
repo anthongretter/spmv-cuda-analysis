@@ -8,7 +8,7 @@
 #include "commons.cuh"
 #include "matrix.cuh"
 
-#define THREADS_PER_BLOCK 128
+#define THREADS_PER_BLOCK 256
 
 #define ALLOC(ptr, size)                  cudaMallocManaged(&ptr, size)
 #define FREE(ptr)                         cudaFree(ptr)
@@ -22,6 +22,10 @@ void SPMV(int row, int col, int n, void* ptr_matrix, VEC_T vec, VEC_T result);
 
 __global__ void SPMV_kernel(int row, int col, int n, void* ptr_matrix, VEC_T vec, VEC_T result);
 
-void* setup_matrix(int row, int col, int n, MATRIX_T matrix);
+void* SPMV_setup(int row, int col, int n, MATRIX_T matrix);
+
+void SPMV_free(void* ptr_matrix);
+
+size_t SPMV_overall_accesses(int row, int col, int n);
 
 #endif /* SPMV_GPU_H */

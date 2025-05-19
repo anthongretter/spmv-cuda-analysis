@@ -10,6 +10,17 @@ void SPMV(int row, int col, int n, void* ptr_matrix, VEC_T vec, VEC_T result) {
     }
 }
 
-void* setup_matrix(int row, int col, int n, MATRIX_T matrix) {
+void* SPMV_setup(int row, int col, int n, MATRIX_T matrix) {
     return (void*) matrix;
+}
+
+void SPMV_free(void* ptr_matrix) {
+    MATRIX_T matrix = (MATRIX_T) ptr_matrix;
+    matrix_free(matrix);
+}
+
+size_t SPMV_overall_accesses(int row, int col, int n) {
+    return (row * col) * sizeof(PRIM_T) +  // matrix
+           col * sizeof(PRIM_T) +          // result[i] = 0
+           col * sizeof(PRIM_T);           // vec
 }

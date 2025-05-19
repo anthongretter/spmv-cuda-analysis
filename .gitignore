@@ -4,5 +4,6 @@
 # Files
 *.o
 *.d
+*.mtx
 *.tar.gz
-spmv_csr
+spmv*
