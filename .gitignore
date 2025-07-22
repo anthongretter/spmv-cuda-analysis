@@ -1,5 +1,9 @@
 # Folders
 .idea
+.ropeproject
+benchmark
+venv
+
 
 # Files
 *.o
@@ -7,3 +11,4 @@
 *.mtx
 *.tar.gz
 spmv*
+benchmark_results.json
