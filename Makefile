@@ -1,18 +1,17 @@
 CC        := nvcc
-HFLAGS    := -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable
-CFLAGS    := -Xcompiler "$(HFLAGS)" -std=c++17 --gpu-architecture=sm_80 -m64
+HFLAGS    := -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable -O3
+CFLAGS    := -Xcompiler "$(HFLAGS)" -std=c++17 --gpu-architecture=sm_80 -m64 -O3
 CPPFLAGS  := -I./include/
 LDFLAGS   :=
 LDLIBS    :=
 
-BINS := spmv_cpu_csr spmv_cpu_naive spmv_gpu_csr spmv_gpu_mem
+IMPS := $(wildcard src/imp/*.cu)
 SRCS := $(wildcard src/*.cu)
 OBJS := $(patsubst %.cu,%.o,$(SRCS))
 
 #$(shell module load CUDA/11.8.0)
-
-cpu: spmv_cpu_naive spmv_cpu_csr
-gpu: spmv_gpu_csr spmv_gpu_mem
+gpu: $(patsubst src/imp/gpu_%.cu,spmv_gpu_%,$(IMPS))
+cpu: $(patsubst src/imp/cpu_%.cu,spmv_cpu_%,$(IMPS))
 
 spmv_gpu_%: CFLAGS+=-DGPU
 spmv_%: SRCS+=src/imp/%.cu
@@ -23,6 +22,6 @@ spmv_%: $(OBJS) src/imp/%.o
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(BINS) $(OBJS) $(wildcard src/imp/*.o)
+	$(RM) $(wildcard spmv_*) $(OBJS) $(wildcard src/imp/*.o)
 
 .PHONY: all clean
