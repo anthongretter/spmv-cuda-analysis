@@ -8,6 +8,54 @@
 #include "commons.cuh"
 
 /**
+ * Adaptive strategy enumeration
+ */
+typedef enum {
+    STRATEGY_SIMPLE,
+    STRATEGY_VECTORIZED,
+    STRATEGY_BLOCK_BASED
+} spmv_strategy_t;
+
+/**
+ * Matrix geometry information for adaptive SPMV strategies
+ */
+typedef struct {
+    // Basic statistics
+    int rows;
+    int cols;
+    int nnz;
+    double density;
+    
+    // Row distribution
+    int min_nnz_per_row;
+    int max_nnz_per_row;
+    double avg_nnz_per_row;
+    double row_variance;
+    
+    // Sparsity pattern analysis
+    int empty_rows;
+    int full_rows;
+    double row_imbalance_factor;
+    
+    // Band structure
+    int bandwidth;
+    int lower_bandwidth;
+    int upper_bandwidth;
+    
+    // Block structure hints
+    int suggested_block_size;
+    double diagonal_dominance;
+    
+    // Memory access patterns
+    double locality_score;
+    int max_column_span;
+    
+    // Adaptive strategy recommendations
+    spmv_strategy_t recommended_strategy;
+    
+} matrix_geometry_t;
+
+/**
  * Opens a Matrix Market file specified via command line arguments
  * 
  * @param argc Number of command line arguments
@@ -23,9 +71,36 @@ FILE* mtx_fopen_from_cli(int argc, const char *argv[]);
  * @param row Pointer to store the number of rows
  * @param col Pointer to store the number of columns
  * @param n Pointer to store the number of non-zero elements
+ * @param geometry Pointer to store matrix geometry information (optional, can be NULL)
  * @return Matrix with the parsed values
  */
-MATRIX_T mtx_parse(FILE* file, int* row, int* col, int* n);
+MATRIX_T mtx_parse(FILE* file, int* row, int* col, int* n, matrix_geometry_t* geometry);
+
+/**
+ * Analyzes matrix geometry for adaptive SPMV strategy selection
+ * 
+ * @param matrix The matrix to analyze
+ * @param row Number of rows
+ * @param col Number of columns
+ * @param n Number of non-zero elements
+ * @param geometry Pointer to store the computed geometry information
+ */
+void mtx_analyze_geometry(MATRIX_T matrix, int row, int col, int n, matrix_geometry_t* geometry);
+
+/**
+ * Prints matrix geometry information
+ * 
+ * @param geometry Matrix geometry structure to print
+ */
+void mtx_print_geometry(const matrix_geometry_t* geometry);
+
+/**
+ * Gets the name of the recommended SPMV strategy
+ * 
+ * @param geometry Matrix geometry information
+ * @return String describing the recommended strategy
+ */
+const char* mtx_get_strategy_name(const matrix_geometry_t* geometry);
 
 /**
  * Closes a Matrix Market file

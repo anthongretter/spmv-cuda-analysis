@@ -12,7 +12,7 @@ int main(int argc, const char *argv[])
     TIMER_T start, stop;
 
     FILE* mtx_file = mtx_fopen_from_cli(argc, argv);
-    MATRIX_T matrix = mtx_parse(mtx_file, &row, &col, &n);
+    MATRIX_T matrix = mtx_parse(mtx_file, &row, &col, &n, NULL);
     mtx_fclose(mtx_file);
 
     SETUP();
