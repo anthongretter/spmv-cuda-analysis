@@ -1,5 +1,6 @@
 #include "gpu.cuh"
 #include <math.h>
+
 template<unsigned int unroll_factor>
 __device__ __forceinline__ PRIM_T compute_unrolled_sum(volatile struct CSR *csr, VEC_T vec, int &j) {
     PRIM_T sum = 0;
