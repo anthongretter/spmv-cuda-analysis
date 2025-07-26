@@ -98,7 +98,7 @@ __global__ void SPMV_kernel(int row, int col, int n, void* ptr_matrix, VEC_T vec
             return;
         }
         int blocks = (to_compute + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
-        SPMV_kernel_aux<<<blocks, to_compute>>>(row, col, n, thread_row, ptr_matrix, vec, result);
+        SPMV_kernel_aux<<<blocks, THREADS_PER_BLOCK>>>(row, col, n, thread_row, ptr_matrix, vec, result);
     }
 }
 
