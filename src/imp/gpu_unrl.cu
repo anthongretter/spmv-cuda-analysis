@@ -4,7 +4,13 @@
 template<unsigned int unroll_factor>
 __device__ __forceinline__ PRIM_T compute_unrolled_sum(volatile struct CSR *csr, VEC_T vec, int &j) {
     PRIM_T sum = 0;
-
+    
+    if constexpr (unroll_factor >= 22) sum += csr->val[j + 21] * vec[csr->col[j + 21]];
+    if constexpr (unroll_factor >= 21) sum += csr->val[j + 20] * vec[csr->col[j + 20]];
+    if constexpr (unroll_factor >= 20) sum += csr->val[j + 19] * vec[csr->col[j + 19]];
+    if constexpr (unroll_factor >= 19) sum += csr->val[j + 18] * vec[csr->col[j + 18]];
+    if constexpr (unroll_factor >= 18) sum += csr->val[j + 17] * vec[csr->col[j + 17]];
+    if constexpr (unroll_factor >= 17) sum += csr->val[j + 16] * vec[csr->col[j + 16]];
     if constexpr (unroll_factor >= 16) sum += csr->val[j + 15] * vec[csr->col[j + 15]];
     if constexpr (unroll_factor >= 15) sum += csr->val[j + 14] * vec[csr->col[j + 14]];
     if constexpr (unroll_factor >= 14) sum += csr->val[j + 13] * vec[csr->col[j + 13]];
@@ -42,7 +48,31 @@ __global__ void SPMV_kernel(int row, int col, int n, void* ptr_matrix, VEC_T vec
 
             // Pick the largest unroll factor that fits
             switch (remaining) {
-                default: // >=16
+                default: // >=22
+                    sum += compute_unrolled_sum<22>(csr, vec, j);
+                    j += 22;
+                    break;
+                case 21:
+                    sum += compute_unrolled_sum<21>(csr, vec, j);
+                    j += 21;
+                    break;
+                case 20:
+                    sum += compute_unrolled_sum<20>(csr, vec, j);
+                    j += 20;
+                    break;
+                case 19:
+                    sum += compute_unrolled_sum<19>(csr, vec, j);
+                    j += 19;
+                    break;
+                case 18:
+                    sum += compute_unrolled_sum<18>(csr, vec, j);
+                    j += 18;
+                    break;
+                case 17:
+                    sum += compute_unrolled_sum<17>(csr, vec, j);
+                    j += 17;
+                    break;
+                case 16:
                     sum += compute_unrolled_sum<16>(csr, vec, j);
                     j += 16;
                     break;
@@ -112,9 +142,9 @@ __global__ void SPMV_kernel(int row, int col, int n, void* ptr_matrix, VEC_T vec
         }
 
         // Handle remaining elements
-        for (; j < row_end; j++) {
-            sum += csr->val[j] * vec[csr->col[j]];
-        }
+        // for (; j < row_end; j++) {
+        //     sum += csr->val[j] * vec[csr->col[j]];
+        // }
 
         result[thread_row] = sum;
     }
