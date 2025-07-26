@@ -1,29 +1,35 @@
 import numpy as np
-import scipy.sparse as sp
 from scipy.io import mmwrite
-import random
+from scipy.sparse import coo_matrix
 
-def generate_irregular_sparse_matrix(n_rows=19000, n_cols=19000, min_nnz=0, max_nnz=300, seed=42):
-    random.seed(seed)
-    np.random.seed(seed)
-
+def generate_concentrated_matrix(n_rows=19000, n_cols=19000,
+                                 heavy_rows_ratio=0.01,  # 1% of rows
+                                 heavy_row_nnz=10000,    # very dense rows
+                                 normal_row_nnz=10):     # sparse rows
+    np.random.seed(42)  # reproducibility
     data = []
     rows = []
     cols = []
 
-    for i in range(n_rows):
-        nnz_in_row = random.randint(min_nnz, max_nnz)
-        col_indices = np.random.choice(n_cols, nnz_in_row, replace=False)
-        values = np.random.rand(nnz_in_row).astype(np.float32)
+    num_heavy_rows = int(n_rows * heavy_rows_ratio)
+    heavy_row_indices = np.random.choice(n_rows, num_heavy_rows, replace=False)
 
-        rows.extend([i] * nnz_in_row)
+    for row in range(n_rows):
+        if row in heavy_row_indices:
+            nnz = min(n_cols, heavy_row_nnz)
+        else:
+            nnz = min(n_cols, normal_row_nnz)
+
+        col_indices = np.random.choice(n_cols, nnz, replace=False)
+        values = np.random.rand(nnz).astype(np.float32)
+
+        rows.extend([row] * nnz)
         cols.extend(col_indices)
         data.extend(values)
 
-    A = sp.coo_matrix((data, (rows, cols)), shape=(n_rows, n_cols))
-    return A
+    coo = coo_matrix((data, (rows, cols)), shape=(n_rows, n_cols))
+    mmwrite("concentrated_matrix.mtx", coo)
+    print(f"Matrix saved to concentrated_matrix.mtx with shape {n_rows}x{n_cols} and {len(data)} non-zeros.")
 
 if __name__ == "__main__":
-    matrix = generate_irregular_sparse_matrix()
-    mmwrite("irregular_19000x19000.mtx", matrix)
-    print("Saved: irregular_19000x19000.mtx")
+    generate_concentrated_matrix()
