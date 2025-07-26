@@ -23,8 +23,8 @@ from pathlib import Path
 import re
 
 IMPLEMENTATIONS = [
-    {"name": "gpu_mem", "description": "GPU Memory Optimized"},
     {"name": "cpu_csr", "description": "CPU Compressed Sparse Row"},
+    {"name": "gpu_mem", "description": "GPU Memory Optimized"},
     {"name": "gpu_unrl", "description": "GPU Loop Unrolling"},
     {"name": "gpu_hbp", "description": "GPU Hash-Based Partitioning"}
 ]

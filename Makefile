@@ -1,8 +1,8 @@
 CC        := nvcc
 HFLAGS    := -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable -O3
-CFLAGS    := -Xcompiler "$(HFLAGS)" -std=c++17 --gpu-architecture=sm_80 -m64 -O3
+CFLAGS    := -Xcompiler "$(HFLAGS)" -std=c++17 -rdc=true -arch=sm_80 -m64 -O3
 CPPFLAGS  := -I./include/
-LDFLAGS   :=
+LDFLAGS   := -arch=sm_80
 LDLIBS    :=
 
 IMPS := $(wildcard src/imp/*.cu)

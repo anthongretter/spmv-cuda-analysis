@@ -37,18 +37,30 @@ __global__ void SPMV_kernel(int row, int col, int n, void* ptr_matrix, VEC_T vec
         int row_end = csr->row[thread_row + 1];
         int j = row_start;
 
-        while (j - row_end > 16) {
+        for (; row_end - j > 16; j++) {
             sum += csr->val[j] * vec[csr->col[j]];
-            j++;
         }
         
-        sum += compute_unrolled_sum<16>(csr, vec, row_end, j);
-
-        // Handle remaining elements
-        // for (; j < row_end; j++) {
-        //     sum += csr->val[j] * vec[csr->col[j]];
-        // }
-
+        int remaining = row_end - j;
+        switch (remaining) {
+            case 16: sum += compute_unrolled_sum<16>(csr, vec, j); break;
+            case 15: sum += compute_unrolled_sum<15>(csr, vec, j); break;
+            case 14: sum += compute_unrolled_sum<14>(csr, vec, j); break;
+            case 13: sum += compute_unrolled_sum<13>(csr, vec, j); break;
+            case 12: sum += compute_unrolled_sum<12>(csr, vec, j); break;
+            case 11: sum += compute_unrolled_sum<11>(csr, vec, j); break;
+            case 10: sum += compute_unrolled_sum<10>(csr, vec, j); break;
+            case 9:  sum += compute_unrolled_sum<9>(csr, vec, j); break;
+            case 8:  sum += compute_unrolled_sum<8>(csr, vec, j); break;
+            case 7:  sum += compute_unrolled_sum<7>(csr, vec, j); break;
+            case 6:  sum += compute_unrolled_sum<6>(csr, vec, j); break;
+            case 5:  sum += compute_unrolled_sum<5>(csr, vec, j); break;
+            case 4:  sum += compute_unrolled_sum<4>(csr, vec, j); break;
+            case 3:  sum += compute_unrolled_sum<3>(csr, vec, j); break;
+            case 2:  sum += compute_unrolled_sum<2>(csr, vec, j); break;
+            case 1:  sum += compute_unrolled_sum<1>(csr, vec, j); break;
+            case 0:  break;
+        }
         result[thread_row] = sum;
     }
 }
