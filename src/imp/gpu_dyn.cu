@@ -66,10 +66,10 @@ __global__ void SPMV_kernel(int row, int col, int n, void* ptr_matrix, VEC_T vec
         int row_start = csr->row[thread_row];
         int row_end = csr->row[thread_row + 1];
         int to_compute = row_end - row_start;
+        if (to_compute == 0) return;
         int j = row_start;
 
-        if (to_compute <= 4096) {
-            //printf("will compute %d\n", to_compute);
+        if (to_compute <= 1024) {
             PRIM_T sum = 0;
             for (; row_end - j > 16; j++) {
                 sum += csr->val[j] * vec[csr->col[j]];
