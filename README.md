@@ -7,7 +7,7 @@ To build the desired implementation you can simply type
 ```shell
 make spmv_<implementation name>
 ```
-Where <_implementation name_> can be `cpu_csr`, `cpu_naive`, `gpu_csr` or `gpu_mem`.
+Where <_implementation name_> can be `cpu_csr`, `gpu_mem`, `gpu_unrl` or `gpu_dyn`.
 Or even, to build all CPU or/and all GPU implementations¹ just run:
 ```shell
 make cpu
@@ -25,7 +25,7 @@ To run GPU implementations on the DISI cluster, you can enter interactively by:
 ```shell
 srun --nodes=1 --ntasks=1 --cpus-per-task=1 --gres=gpu:1 --partition=edu-short --pty /bin/bash
 ```
-And then run the first command on this section. 
+And then run the first command on this section. Or the script provided with `./run_job` 
 
 > [1] _the implementations are compiled separately
 > due to the usage of Compile-time Conditional Inclusion. 

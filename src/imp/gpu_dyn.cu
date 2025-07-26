@@ -51,7 +51,6 @@ __global__ void SPMV_kernel_aux(int row, int col, int n, int looking_row, void* 
 
     if (tid == 0) {
         result[looking_row] = ssum[0];
-        printf("row %d\n", looking_row);
     }
 }
 
