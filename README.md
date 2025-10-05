@@ -21,11 +21,6 @@ There are some `.mtx` included in the **resources** directory². Below sits an e
 ```shell
 ./spmv_gpu_mem ./resources/rim.mtx
 ```
-To run GPU implementations on the DISI cluster, you can enter interactively by:
-```shell
-srun --nodes=1 --ntasks=1 --cpus-per-task=1 --gres=gpu:1 --partition=edu-short --pty /bin/bash
-```
-And then run the first command on this section. Or the script provided with `./run_job` 
 
 > [1] _the implementations are compiled separately
 > due to the usage of Compile-time Conditional Inclusion. 
